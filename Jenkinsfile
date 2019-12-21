@@ -12,6 +12,24 @@ pipeline {
         booleanParam(name: 'build_and_run_docker', defaultValue: true, description: 'Deploy and run docker')
     	booleanParam(name: 'remove', defaultValue: false, description: 'Remove Dokuwiki')
   }
+   stage('Remove Dokuwiki') {
+	    when {
+	     expression {params.remove == true}
+	    }
+        stages {
+		  stage('Stop and delete docker container') {
+		    steps {
+                sh "docker container stop dokuwiki"
+			    sh "docker container prune -f"
+	        }
+		  }
+          stage('Remove docker image') {
+            steps{
+              sh "docker system prune -af"
+            }
+          }
+        }
+     }	
   stages {
      stage ('Build and run docker for Dokuwiki') {
 	    when {
@@ -40,20 +58,6 @@ pipeline {
               }
             }
           }
-          stage('Remove Dokuwiki') {
-	    stages {
-		stage('Stop and delete docker container') {
-		    steps {
-                sh "docker container stop dokuwiki"
-			    sh "docker container prune -f"
-	        }
-		  }
-          stage('Remove docker image') {
-            steps{
-              sh "docker system prune -af"
-            }
-          }
-        }
           stage('Run docker image'){
             steps {
               sh "echo $registry:$BUILD_NUMBER"
@@ -62,7 +66,7 @@ pipeline {
           } 
 	    }
      }
-     }		
+	
    }
    post {
     success {
