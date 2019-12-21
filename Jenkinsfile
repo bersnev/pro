@@ -43,7 +43,7 @@ pipeline {
           stage('Run docker image'){
             steps {
               sh "echo $registry:$BUILD_NUMBER"
-              sh "docker run -d  -p 9001:80 --name dokuwiki $registry:$BUILD_NUMBER"
+              sh "docker run -d  -p 9000:80 --name dokuwiki $registry:$BUILD_NUMBER"
             }
           } 
 	    }
