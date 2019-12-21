@@ -11,7 +11,7 @@ pipeline {
 	      stages {
           stage('Clone Git') {
             steps {
-              git url: "git@github.com:bersnev/pro.git}",
+              git url: "git@github.com:bersnev/pro.git",
               credentialsId: 'secret'
             }
           }
