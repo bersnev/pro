@@ -9,22 +9,9 @@ pipeline {
     parameters {
         string(name: 'repository_url', defaultValue: 'git@github.com:bersnev/pro.git', description: 'Github repository url')
         string(name: 'DockerHub', defaultValue: 'bersnev/project', description: 'DockerHub repository ')
-    }
-  stage('Remove Dokuwiki') {
-	        stages {
-		  stage('Stop and delete docker container') {
-		    steps {
-                sh "docker container stop dokuwiki"
-			    sh "docker container prune -f"
-	        }
-		  }
-          stage('Remove docker image') {
-            steps{
-              sh "docker system prune -af"
-            }
-          }
-        }
-     }
+        booleanParam(name: 'build_and_run_docker', defaultValue: true, description: 'Deploy and run docker')
+    	booleanParam(name: 'remove', defaultValue: false, description: 'Remove Dokuwiki')
+  }
   stages {
      stage ('Build and run docker for Dokuwiki') {
 	    when {
@@ -53,6 +40,23 @@ pipeline {
               }
             }
           }
+          stage('Remove Dokuwiki') {
+	    when {
+	     expression {params.remove == true}
+	    }
+          stages {
+		  stage('Stop and delete docker container') {
+		    steps {
+                sh "docker container stop dokuwiki"
+			    sh "docker container prune -f"
+	        }
+		  }
+          stage('Remove docker image') {
+            steps{
+              sh "docker system prune -af"
+            }
+          }
+        }
           stage('Run docker image'){
             steps {
               sh "echo $registry:$BUILD_NUMBER"
@@ -61,6 +65,7 @@ pipeline {
           } 
 	    }
      }
+     }		
    }
    post {
     success {
