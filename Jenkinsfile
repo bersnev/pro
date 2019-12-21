@@ -12,24 +12,6 @@ pipeline {
         booleanParam(name: 'build_and_run_docker', defaultValue: true, description: 'Deploy and run docker')
     	booleanParam(name: 'remove', defaultValue: false, description: 'Remove Dokuwiki')
   }
-     stage('Remove Dokuwiki') {
-	    when {
-	     expression {params.remove == true}
-	    }
-        stages {
-		  stage('Stop and delete docker container') {
-		    steps {
-                sh "docker container stop dokuwiki"
-			    sh "docker container prune -f"
-	        }
-		  }
-          stage('Remove docker image') {
-            steps{
-              sh "docker system prune -af"
-            }
-          }
-        }
-     }  
   stages {
      stage ('Build and run docker for Dokuwiki') {
 	    when {
@@ -41,6 +23,12 @@ pipeline {
               git url: "${params.repository_url}",
               credentialsId: 'secret'
             }
+            steps {
+              sh "docker container stop dokuwiki"
+			    sh "docker container prune -f"
+                            sh "docker system prune -af"
+            }
+
           }
           stage('Build image') {
             steps {
@@ -66,6 +54,24 @@ pipeline {
           } 
 	    }
      }
+     stage('Remove Dokuwiki') {
+	    when {
+	     expression {params.remove == true}
+	    }
+        stages {
+		  stage('Stop and delete docker container') {
+		    steps {
+                sh "docker container stop dokuwiki"
+			    sh "docker container prune -f"
+	        }
+		  }
+          stage('Remove docker image') {
+            steps{
+              sh "docker system prune -af"
+            }
+          }
+        }
+     }		
    }
    post {
     success {
