@@ -5,14 +5,9 @@ pipeline {
     environment {
         registry = 'bersnev/project'
         registryCredential = 'dockerhub'
-        params.build_and_run_docker = true
-        params.remove = true
     }
   stages {
      stage ('Build and run docker for Dokuwiki') {
-	    when {
-	     expression {params.build_and_run_docker == true}
-	    }  
 	      stages {
           stage('Clone Git') {
             steps {
@@ -45,9 +40,6 @@ pipeline {
 	    }
      }
      stage('Remove Dokuwiki') {
-	    when {
-	     expression {params.remove == true}
-	    }
         stages {
 		  stage('Stop and delete docker container') {
 		    steps {
