@@ -7,11 +7,7 @@ pipeline {
         registryCredential = 'dockerhub'
     }
     parameters {
-        string(name: 'repository_url', defaultValue: 'git@github.com:bersnev/pro.git', description: 'Github repository url')
-        string(name: 'DockerHub', defaultValue: 'bersnev/project', description: 'DockerHub repository ')
-        booleanParam(name: 'build_and_run_docker', defaultValue: true, description: 'Deploy and run docker')
-    	booleanParam(name: 'remove', defaultValue: false, description: 'Remove Dokuwiki')
-  }
+                }
   stages {
      stage ('Build and run docker for Dokuwiki') {
 	    when {
@@ -20,15 +16,9 @@ pipeline {
 	      stages {
           stage('Clone Git') {
             steps {
-              git url: "${params.repository_url}",
+              git url: "git@github.com:bersnev/pro.git}",
               credentialsId: 'secret'
             }
-            steps {
-              sh "docker container stop dokuwiki"
-			    sh "docker container prune -f"
-                            sh "docker system prune -af"
-            }
-
           }
           stage('Build image') {
             steps {
