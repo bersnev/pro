@@ -5,6 +5,8 @@ pipeline {
     environment {
         registry = 'bersnev/project'
         registryCredential = 'dockerhub'
+        params.build_and_run_docker = true
+        params.remove = true
     }
   stages {
      stage ('Build and run docker for Dokuwiki') {
