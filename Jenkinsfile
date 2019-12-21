@@ -12,7 +12,7 @@ pipeline {
         booleanParam(name: 'build_and_run_docker', defaultValue: true, description: 'Deploy and run docker')
     	booleanParam(name: 'remove', defaultValue: false, description: 'Remove Dokuwiki')
   }
-   stage('Remove Dokuwiki') {
+     stage('Remove Dokuwiki') {
 	    when {
 	     expression {params.remove == true}
 	    }
@@ -29,7 +29,7 @@ pipeline {
             }
           }
         }
-     }	
+     }  
   stages {
      stage ('Build and run docker for Dokuwiki') {
 	    when {
@@ -66,7 +66,6 @@ pipeline {
           } 
 	    }
      }
-	
    }
    post {
     success {
