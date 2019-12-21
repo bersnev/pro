@@ -41,11 +41,8 @@ pipeline {
             }
           }
           stage('Remove Dokuwiki') {
-	    when {
-	     expression {params.remove == true}
-	    }
-          stages {
-		  stage('Stop and delete docker container') {
+	    stages {
+		stage('Stop and delete docker container') {
 		    steps {
                 sh "docker container stop dokuwiki"
 			    sh "docker container prune -f"
