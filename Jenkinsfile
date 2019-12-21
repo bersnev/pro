@@ -9,10 +9,8 @@ pipeline {
     parameters {
         string(name: 'repository_url', defaultValue: 'git@github.com:bersnev/pro.git', description: 'Github repository url')
         string(name: 'DockerHub', defaultValue: 'bersnev/project', description: 'DockerHub repository ')
-        booleanParam(name: 'build_and_run_docker', defaultValue: true, description: 'Deploy and run docker')
-    	booleanParam(name: 'remove', defaultValue: false, description: 'Remove Dokuwiki')
-  }
-    stage('Remove Dokuwiki') {
+    }
+  stage('Remove Dokuwiki') {
 	        stages {
 		  stage('Stop and delete docker container') {
 		    steps {
